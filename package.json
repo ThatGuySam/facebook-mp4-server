@@ -20,7 +20,7 @@
     "axios": "^0.21.1",
     "fbvideos": "^1.0.2",
     "googleapis": "^47.0.0",
-    "got": "^10.6.0",
+    "got": "^12.5.3",
     "micro-redirect": "^1.0.2"
   }
 }
