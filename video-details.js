@@ -1,22 +1,21 @@
 
-// URL utility
-import url from 'url'
+const { parse } = require('node:url')
 
-const got = require('got')
-
-const microRedirect = require("micro-redirect")
+const { fetchText } = require('./lib/fetch-text')
 
 // const fbvid = require('fbvideos')
 
 module.exports = async function (req, res) {
     // Break out the id param from our request's query string
-    const { query: { id, redirect = false } } = url.parse(req.url, true)
+    const { query: { id } } = parse(req.url, true)
     // const perPage = 50
 
     const videoUrl = `https://www.facebook.com/${id}`
 
-    const { videoDetails = null, error = null } = await got(videoUrl).then(res => {
-        const rawJSON = res.body.split('<script type="application/ld+json">')[1].split('</script>')[0]
+    const { videoDetails = null, error = null } = await fetchText(videoUrl, {
+        allowedHostSuffixes: ['facebook.com'],
+    }).then(body => {
+        const rawJSON = body.split('<script type="application/ld+json">')[1].split('</script>')[0]
 
         return {
             videoDetails: JSON.parse(rawJSON)

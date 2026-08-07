@@ -1,0 +1,14 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: monthly
+    # This dormant project should only receive security updates, not routine
+    # version-churn PRs. Security fixes are grouped into one reviewable PR.
+    open-pull-requests-limit: 0
+    groups:
+      security-fixes:
+        applies-to: security-updates
+        patterns:
+          - "*"

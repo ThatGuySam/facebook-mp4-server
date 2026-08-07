@@ -4,7 +4,7 @@
   "description": "Get's the MP4 URL of a public Facebook video. ",
   "main": "subreddit.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node --test && node --check video.js && node --check video-details.js && node --check video-embed.js"
   },
   "repository": {
     "type": "git",
@@ -16,11 +16,7 @@
     "url": "https://github.com/ThatGuySam/facebook-mp4-server/issues"
   },
   "homepage": "https://github.com/ThatGuySam/facebook-mp4-server#readme",
-  "dependencies": {
-    "axios": "^0.21.1",
-    "fbvideos": "^1.0.2",
-    "googleapis": "^47.0.0",
-    "got": "^10.6.0",
-    "micro-redirect": "^1.0.2"
+  "engines": {
+    "node": "24.x"
   }
 }
