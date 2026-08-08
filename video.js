@@ -1,19 +1,16 @@
 
-// URL utility
-import url from 'url'
+const { parse } = require('node:url')
 
-const microRedirect = require("micro-redirect")
-
-const fbvid = require('fbvideos')
+const { getFacebookVideo } = require('./lib/facebook-video')
 
 module.exports = async function (req, res) {
     // Break out the id param from our request's query string
-    const { query: { id, redirect = false } } = url.parse(req.url, true)
+    const { query: { id, redirect = false } } = parse(req.url, true)
     // const perPage = 50
 
     const videoUrl = `https://www.facebook.com/${id}`
 
-    const { videoData = null, error = null } = await fbvid.high(videoUrl).then(videoData => {
+    const { videoData = null, error = null } = await getFacebookVideo(videoUrl, 'high').then(videoData => {
         // console.log(videoData)
         return { videoData }
         // => { url: 'https://video.fpat1-1.fna.fbcdn.net/...mp4?934&OE=2kf2lf4g' }
@@ -22,15 +19,6 @@ module.exports = async function (req, res) {
 
         return { error }
     })
-
-    if ( redirect ) {
-        // 307 - Temporary Redirect
-        const statusCode = 307
-        
-        microRedirect(res, statusCode, videoData.url)
-
-        return
-    }
 
     // Set Cors Headers to allow all origins so data can be requested by a browser
     res.setHeader("Access-Control-Allow-Origin", "*");
@@ -43,6 +31,15 @@ module.exports = async function (req, res) {
         })
         
         // Fire 
+        return
+    }
+
+    if ( redirect ) {
+        // 307 - Temporary Redirect
+        res.statusCode = 307
+        res.setHeader('Location', videoData.url)
+        res.end()
+
         return
     }
 
